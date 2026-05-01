@@ -1,0 +1,86 @@
+# Soundscape Mapper Configuration
+# ---------------------------------
+# Adjust these parameters to match your project environment.
+
+project:
+  name: "Soundscape Mapper"
+  version: "1.0.0"
+  description: "Ecoacoustic GIS mapping and analysis platform"
+  study_area: "Swat Valley, Khyber Pakhtunkhwa, Pakistan"
+
+# Paths (relative to project root)
+paths:
+  raw_audio: "data/raw_audio"
+  processed: "data/processed"
+  spatial_data: "data/spatial_data"
+  sample_recordings: "data/sample_recordings"
+  outputs: "outputs"
+  logs: "logs"
+
+# Audio processing settings
+audio:
+  sample_rate: 22050          # Hz – resample all recordings to this rate
+  n_fft: 2048                 # FFT window size
+  hop_length: 512             # Hop size between frames
+  n_mels: 128                 # Number of mel filter banks
+  n_mfcc: 13                  # Number of MFCC coefficients
+  window: "hann"              # Window function
+  duration: null              # Max duration to load (seconds); null = full file
+  mono: true                  # Convert stereo to mono
+  formats:                    # Supported audio formats
+    - ".wav"
+    - ".mp3"
+    - ".flac"
+
+# Ecoacoustic indices
+indices:
+  aci:
+    j_step: 5                 # Step size for ACI computation
+  ndsi:
+    anthrophony_min: 1000     # Hz
+    anthrophony_max: 2000     # Hz
+    biophony_min: 2000        # Hz
+    biophony_max: 11000       # Hz
+  adi:
+    max_freq: 10000           # Hz
+    db_threshold: -50         # dB threshold for presence/absence
+    freq_step: 1000           # Hz per band
+  bi:
+    min_freq: 2000            # Hz
+    max_freq: 8000            # Hz
+
+# Spatial analysis
+spatial:
+  crs: "EPSG:4326"            # Coordinate reference system
+  interpolation_method: "idw" # "idw" or "kriging"
+  idw_power: 2                # IDW distance-decay power
+  kriging_model: "spherical"  # variogram model
+  grid_resolution: 0.01       # degrees – resolution of interpolation grid
+  hotspot_alpha: 0.05         # significance level for Gi* / Moran's I
+
+# Machine learning
+ml:
+  clustering:
+    kmeans_n_clusters: 5
+    kmeans_random_state: 42
+    dbscan_eps: 0.5
+    dbscan_min_samples: 5
+  classification:
+    test_size: 0.2
+    random_state: 42
+    cv_folds: 5
+
+# Visualization
+visualization:
+  map_center: [35.2, 72.4]    # [lat, lon] – Swat Valley, KPK
+  map_zoom: 10
+  colormap: "YlOrRd"
+  marker_radius: 10
+  heatmap_radius: 20
+  export_dpi: 300
+
+# Logging
+logging:
+  level: "INFO"               # DEBUG | INFO | WARNING | ERROR
+  file: "logs/soundscape.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
